@@ -1,12 +1,14 @@
 package com.backend.productservice25july.controllers;
 
-import com.backend.productservice25july.dtos.CreateProductRequestDto;
-import com.backend.productservice25july.dtos.CreateProductResponseDto;
+import com.backend.productservice25july.dtos.ErrorResponseDto;
+import com.backend.productservice25july.dtos.product.*;
 import com.backend.productservice25july.models.Product;
 import com.backend.productservice25july.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -30,8 +32,18 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public void getAllProducts(){
+    public GetAllProductsResponseDto getAllProducts(){
+        List<Product> products = productService.getAllProducts();
+        GetAllProductsResponseDto response = new GetAllProductsResponseDto();
 
+        List<GetProductDto> productResponseDtos = new ArrayList<>();
+
+        for (Product product : products) {
+            productResponseDtos.add(GetProductDto.from(product));
+        }
+        response.setProducts(productResponseDtos);
+
+        return response;
     }
 
     @GetMapping("/{id}")
@@ -43,6 +55,22 @@ public class ProductController {
     public void deleteProduct(){
 
     }
+
+    @PatchMapping("/{id}")
+    public PatchProductResponseDto updateProduct(
+            @PathVariable("id") Long productId,
+            @RequestBody CreateProductDto productDto
+    ){
+
+        Product product = productService.particalUpdateProduct(productId, productDto.toProduct() );
+
+        PatchProductResponseDto response = new PatchProductResponseDto();
+        response.setProduct(GetProductDto.from(product));
+        return response;
+    }
+
+    public void replaceProduct(){}
+
 
 //    @RequestMapping(name = "RAHUL", value = "/products")
 //    public String anuhttt(){
