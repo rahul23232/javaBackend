@@ -1,5 +1,6 @@
 package com.backend.productservice25july.dtos.fakeStore;
 
+import com.backend.productservice25july.models.Category;
 import com.backend.productservice25july.models.Product;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,9 @@ public class FakeStoreGetProductResponseDto {
         product.setTitle(this.getTitle());
         product.setDescription(this.getDescription());
         product.setImageUrl(this.getImage());
-        product.setCategoryName(this.getCategory());
+        Category category = new Category();
+        category.setName(this.getCategory());
+        product.setCategory(category);
         product.setPrice(this.getPrice());
 
         return product;
