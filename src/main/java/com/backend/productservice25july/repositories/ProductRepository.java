@@ -1,6 +1,8 @@
 package com.backend.productservice25july.repositories;
 
 import com.backend.productservice25july.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +41,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query( value = CustomQueries.GET_PRODUCTS_WITH_SUBCATEGORY_NAME, nativeQuery = true)
     List<Product> somesome2();
+
+    List<Product> findByTitleContaining(String query);
+
+    Page<Product> findAllByTitleContainingAndCategory_Id(
+            String title, Long categoryId, Pageable pageable
+    );
 }
